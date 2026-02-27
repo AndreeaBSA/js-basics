@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Selectors - Exerciții Playwright Style</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Exerciții DOM Selectors</h1>
+        <p>Selectori folosiți în Playwright</p>
+    </header>
+
+    <main class="container">
+        <!-- Formular de Login -->
+        <section class="card" id="login-section">
+            <h2>Formular Login</h2>
+            <form class="form-container" id="login-form">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" class="form-input" placeholder="exemplu@mail.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Parolă:</label>
+                    <input type="password" id="password" class="form-input" placeholder="Parola ta">
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" class="form-input" placeholder="Nume utilizator">
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Vârstă:</label>
+                    <input type="number" id="age" class="form-input" placeholder="25" min="18" max="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="website">Website:</label>
+                    <input type="url" id="website" class="form-input" placeholder="https://exemplu.com">
+                </div>
+
+                <button type="submit" class="login-button" data-testid="save-btn" data-cy="login">
+                    Autentificare
+                </button>
+                <button type="reset" class="reset-button" data-testid="reset-btn">
+                    Resetează
+                </button>
+            </form>
+        </section>
+
+        <!-- Lista de navigare -->
+        <section class="card" id="nav-section">
+            <h2>Meniu Navigare</h2>
+            <ul class="nav-menu">
+                <li data-page="home">Acasă</li>
+                <li data-page="about">Despre Noi</li>
+                <li data-page="services" class="active">Servicii</li>
+                <li data-page="contact">Contact</li>
+                <li data-page="blog">Blog</li>
+            </ul>
+        </section>
+
+        <!-- Secțiune Produse -->
+        <section class="card" id="products-section">
+            <h2>Lista Produse</h2>
+            <div class="products-grid">
+                <div class="product-card" data-category="electronics" data-price="999">
+                    <h3 class="product-title">Laptop Pro</h3>
+                    <p class="product-price">999 RON</p>
+                    <button class="btn-buy" data-testid="buy-laptop">Cumpără</button>
+                </div>
+                <div class="product-card" data-category="electronics" data-price="599">
+                    <h3 class="product-title">Telefon Smart</h3>
+                    <p class="product-price">599 RON</p>
+                    <button class="btn-buy" data-testid="buy-phone">Cumpără</button>
+                </div>
+                <div class="product-card" data-category="accessories" data-price="149">
+                    <h3 class="product-title">Căști Wireless</h3>
+                    <p class="product-price">149 RON</p>
+                    <button class="btn-buy" data-testid="buy-headphones">Cumpără</button>
+                </div>
+                <div class="product-card" data-category="accessories" data-price="79">
+                    <h3 class="product-title">Mouse Gaming</h3>
+                    <p class="product-price">79 RON</p>
+                    <button class="btn-buy" data-testid="buy-mouse">Cumpără</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checkbox-uri și Radio buttons -->
+        <section class="card" id="options-section">
+            <h2>Opțiuni</h2>
+            <div class="options-container">
+                <div class="checkbox-group">
+                    <h4>Interese:</h4>
+                    <label>
+                        <input type="checkbox" name="interest" value="sport" checked> Sport
+                    </label>
+                    <label>
+                        <input type="checkbox" name="interest" value="music"> Muzică
+                    </label>
+                    <label>
+                        <input type="checkbox" name="interest" value="tech"> Tehnologie
+                    </label>
+                    <label>
+                        <input type="checkbox" name="interest" value="art" disabled> Artă (indisponibil)
+                    </label>
+                </div>
+
+                <div class="radio-group">
+                    <h4>Experiență:</h4>
+                    <label>
+                        <input type="radio" name="experience" value="junior"> Junior
+                    </label>
+                    <label>
+                        <input type="radio" name="experience" value="mid" checked> Mid
+                    </label>
+                    <label>
+                        <input type="radio" name="experience" value="senior"> Senior
+                    </label>
+                </div>
+
+                <div class="select-group">
+                    <h4>Țară:</h4>
+                    <select id="country" class="form-select">
+                        <option value="">Selectează...</option>
+                        <option value="ro">România</option>
+                        <option value="md">Moldova</option>
+                        <option value="de">Germania</option>
+                        <option value="uk">Marea Britanie</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabel cu date -->
+        <section class="card" id="table-section">
+            <h2>Tabel Utilizatori</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nume</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-user-id="1">
+                        <td>1</td>
+                        <td class="user-name">Ion Popescu</td>
+                        <td class="user-email">ion@mail.com</td>
+                        <td>Admin</td>
+                        <td><span class="status active">Activ</span></td>
+                    </tr>
+                    <tr data-user-id="2">
+                        <td>2</td>
+                        <td class="user-name">Maria Ionescu</td>
+                        <td class="user-email">maria@mail.com</td>
+                        <td>User</td>
+                        <td><span class="status inactive">Inactiv</span></td>
+                    </tr>
+                    <tr data-user-id="3">
+                        <td>3</td>
+                        <td class="user-name">Andrei Vasile</td>
+                        <td class="user-email">andrei@mail.com</td>
+                        <td>Editor</td>
+                        <td><span class="status active">Activ</span></td>
+                    </tr>
+                    <tr data-user-id="4">
+                        <td>4</td>
+                        <td class="user-name">Elena Dumitrescu</td>
+                        <td class="user-email">elena@mail.com</td>
+                        <td>User</td>
+                        <td><span class="status pending">În așteptare</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Articole Blog -->
+        <section class="card" id="blog-section">
+            <h2>Articole Recente</h2>
+            <article class="blog-post" data-id="101">
+                <h3 class="post-title">Introducere în JavaScript</h3>
+                <p class="post-excerpt">Învață bazele programării web...</p>
+                <a href="#" class="read-more">Citește mai mult</a>
+            </article>
+            <article class="blog-post" data-id="102">
+                <h3 class="post-title">CSS Flexbox Tutorial</h3>
+                <p class="post-excerpt">Descoperă puterea layout-ului flexibil...</p>
+                <a href="#" class="read-more">Citește mai mult</a>
+            </article>
+            <article class="blog-post featured" data-id="103">
+                <h3 class="post-title">React pentru Începători</h3>
+                <p class="post-excerpt">Primul tău pas în lumea React...</p>
+                <a href="#" class="read-more">Citește mai mult</a>
+            </article>
+        </section>
+
+        <!-- Notificări -->
+        <section class="card" id="notifications-section">
+            <h2>Notificări</h2>
+            <div class="notification success" data-type="success">
+                <span class="notification-icon">✓</span>
+                <span class="notification-text">Operație reușită!</span>
+                <button class="notification-close">&times;</button>
+            </div>
+            <div class="notification warning" data-type="warning">
+                <span class="notification-icon">⚠</span>
+                <span class="notification-text">Atenție la această acțiune!</span>
+                <button class="notification-close">&times;</button>
+            </div>
+            <div class="notification error" data-type="error">
+                <span class="notification-icon">✕</span>
+                <span class="notification-text">A apărut o eroare!</span>
+                <button class="notification-close">&times;</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Panou output -->
+    <aside id="output-panel">
+        <h3>Rezultate:</h3>
+        <pre id="output"></pre>
+        <button id="clear-btn" class="btn-clear">Șterge</button>
+    </aside>
+
+    <script src="script.js"></script>
+</body>
+</html>
