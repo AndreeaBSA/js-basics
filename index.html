@@ -1,15 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=q, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-
-    <p>Ana are mere</p>
-    <p>Prima lectie</p>
-    <p>Ce mai faci</p>
-    
-</body>
+<html>
+  <head>
+    <title>JavaScript and the DOM</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1 id="myHeading">JavaScript and the DOM</h1>
+    <p>Making a web page interactive</p>
+    <button id="toggleList">Hide list</button>
+  <div class="list test" id="list-id">
+      <p class="description">Things that are purple:</p>
+      <input type="text" >
+      <button class="description">Change list description</button>
+      <ul>
+        <li>grapes<button class="up">1</button><button class="down">Down</button><button class="remove">Remove</button></li>
+        <li>amethyst<button class="up">2</button><button class="down">Down</button><button class="remove">Remove</button></li>
+        <li>lavender<button class="up">3</button><button class="down">Down</button><button class="remove">Remove</button></li>
+        <li>plums<button class="up">4</button><button class="down">Down</button><button class="remove">Remove</button></li>
+      </ul>
+      <input type="text" >
+      <button class="addItemButton">Add item</button>
+    </div>
+    <script src="app.js"></script>
+  </body>
 </html>
