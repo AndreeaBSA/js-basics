@@ -62,11 +62,24 @@ test.describe('auth',()=>{
      });
 
      test('4.Invalid password -> inline error, fields stay populated, button enabled', async ({loginPage, inventoryPage})=> {
-      await loginAs(loginPage, users.invalid, false); 
-      await expect(loginPage.errorBanner).toContainText('Epic sadface: Username and password do not match any user in this service')
-      //await expect(loginPage.errorBanner).toContainText(logginErrors.invalidCredentials);
+      //  await  loginPage.goto();
+      //  await  loginPage.login(users.invalid.username,users.invalid.password);
+      //  await expect(loginPage.errorBanner).toContainText(logginErrors.invalidCredentials);
 
-      await expect(loginPage.page).
+      // await expect(loginPage.loginButton).toBeEnabled();
+
+      // // await expect(loginPage.usernameInput).toContainText(users.invalid.username);
+      // await expect(loginPage.passwordInput).toContainText(users.invalid.password);
+
+
+      await loginPage.goto();
+      await loginPage.fillUsername(users.invalid.username);
+      await loginPage.fillPassword(users.invalid.password);
+      await loginPage.submit();
+      await expect(loginPage.errorBanner).toContainText(logginErrors.invalidCredentials);
+      await expect(loginPage.usernameInput).toContainText(users.invalid.username);
+      await expect(loginPage.passwordInput).toContainText(users.invalid.password);
+
 
       });
 
