@@ -15,7 +15,7 @@
 4) Invalid password -> inline error, fields stay populated, button enabled.  
    PRECONDITIE: pe login.  
    ACTIUNE: user valid + parola invalida, submit.  
-   REZULTAT: mesaj generic, campurile raman populate.  
+   REZULTAT: mesaj generic, campurile raman populate.  playwright 
 5) Empty credentials -> both required field messages shown, no navigation.  
    PRECONDITIE: pe login cu campuri goale.  
    ACTIUNE: apas Login.  
