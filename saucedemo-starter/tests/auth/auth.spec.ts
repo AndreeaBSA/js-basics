@@ -77,8 +77,8 @@ test.describe('auth',()=>{
       await loginPage.fillPassword(users.invalid.password);
       await loginPage.submit();
       await expect(loginPage.errorBanner).toContainText(logginErrors.invalidCredentials);
-      await expect(loginPage.usernameInput).toContainText(users.invalid.username);
-      await expect(loginPage.passwordInput).toContainText(users.invalid.password);
+      await expect(loginPage.usernameInput).toHaveValue(users.invalid.username);
+      await expect(loginPage.passwordInput).toHaveValue(users.invalid.password);
 
 
       });
@@ -97,5 +97,8 @@ test.describe('auth',()=>{
 
 
       });
+
+
+
 
 })

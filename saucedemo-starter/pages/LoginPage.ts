@@ -1,5 +1,5 @@
     import { Page, Locator } from '@playwright/test';
-
+    import { User } from '../models/User';
     import {routes} from '../utils/test-data'
     export class LoginPage{
 
@@ -46,6 +46,10 @@
              await this.loginButton.click();
         }
 
-      
+        async  loginAs(user:User) {
+            await this.goto();
+            await this.login(user.username,user.password);
+        }
+        
         
     }
