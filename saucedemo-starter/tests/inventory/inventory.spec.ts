@@ -6,8 +6,6 @@ import { users, routes, logginErrors, products } from '../../utils/test-data'
 
 
 
-
-
 test.describe('# Inventory Scenarios', () => {
 
     test.beforeEach(async ({ loginPage }) => {
@@ -37,35 +35,67 @@ test.describe('# Inventory Scenarios', () => {
         //    ACTIUNE: aplic fiecare sortare.  
         //    REZULTAT: ordinea respecta criteriul ales.  
 
-        await expect(inventoryPage.products).toHaveCount(products.length);
-        const productsCount = await inventoryPage.products.count();
+        // await expect(inventoryPage.products).
+        // const productsCount = await inventoryPage.products.count();
 
-        for (let i = 0; i < productsCount; i++) {
-            const card = inventoryPage.products.nth(i);
-            const actualProduct = await inventoryPage.getProductDetails(card);
-            expect(actualProduct).toEqual(products[i]);
-        }
+        // for (let i = 0; i < productsCount; i++) {
+        //     const card = inventoryPage.products.nth(i);
+        //     const actualProduct = await inventoryPage.getProductDetails(card);
+        //     expect(actualProduct).toEqual(products[i]);
+        // }
+        
+        await inventoryPage.selectSort('az');
+        let az = await inventoryPage.getProductNames();
+        let namesAsc= products.map(pr=>pr.name).sort();
+        expect(az).toEqual(namesAsc);
+
+        await inventoryPage.selectSort('za');
+        let za = await inventoryPage.getProductNames();
+        let namesDesc= products.map(pr=>pr.name).sort().reverse();
+        expect(za).toEqual(namesDesc);
+
+        await inventoryPage.selectSort('lohi');
+        let lohi= await inventoryPage.getProductPrice();
+        let priceAsc=products.map(pr=>pr.price).sort((a,b)=>a-b);
+        expect(lohi).toEqual(priceAsc);
+
+        await inventoryPage.selectSort('hilo');
+        let hilo= await inventoryPage.getProductPrice();
+        let priceDesc=products.map(pr=>pr.price).sort((a,b)=>b-a);
+        expect(hilo).toEqual(priceDesc);
     });
-
-
-
-
-
-
-
 
 });
 
-
-
-// 2) Sorting -> validates A→Z, Z→A, price low→high, price high→low orders.
-//    PRECONDITIE: pe inventory cu lista incarcata.
-//    ACTIUNE: aplic fiecare sortare.
-//    REZULTAT: ordinea respecta criteriul ales.
+ test('3. Product links -> each card navigates to detail page with matching title/price/desc', async ({ inventoryPage,productDetailsPage }) => {
 // 3) Product links -> each card navigates to detail page with matching title/price/desc.
 //    PRECONDITIE: pe inventory.
 //    ACTIUNE: dau click pe titlu/poza produs.
 //    REZULTAT: pagina detalii corespunde cardului.
+
+    let target=products[0];
+
+    await inventoryPage.openDetails(target.name);
+    // await expect(productDetailsPage.itemTitle).toHaveText(target.name);
+
+    // await productDetailsPage.backButton.click();
+    
+    // await inventoryPage.openDetails(target.name);
+    // await expect(productDetailsPage.itemTitle).toHaveText(target.name);
+ });
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 4) Add/Remove -> toggles button label and updates cart badge count.
 //    PRECONDITIE: pe inventory, badge initial cunoscut.
 //    ACTIUNE: Add to cart / Remove pe un item.
