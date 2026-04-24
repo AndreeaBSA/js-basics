@@ -64,10 +64,10 @@ export class InventoryPage {
 
 async openDetails(name:string){
   const card= this.getCardByName(name);
-  // await card.locator('.inventory-item').click();
-  // await card.getByRole('link',{name}).first().click();
+  
+  await card.getByRole('link',{name}).first().click();
   // await card.click();   //A
-  await card.locator('[data-test$="-test-link"]').click();
+  // await card.locator('[data-test$="-test-link"]').click();
 }
 
 

@@ -43,46 +43,62 @@ test.describe('# Inventory Scenarios', () => {
         //     const actualProduct = await inventoryPage.getProductDetails(card);
         //     expect(actualProduct).toEqual(products[i]);
         // }
-        
+
         await inventoryPage.selectSort('az');
         let az = await inventoryPage.getProductNames();
-        let namesAsc= products.map(pr=>pr.name).sort();
+        let namesAsc = products.map(pr => pr.name).sort();
         expect(az).toEqual(namesAsc);
 
         await inventoryPage.selectSort('za');
         let za = await inventoryPage.getProductNames();
-        let namesDesc= products.map(pr=>pr.name).sort().reverse();
+        let namesDesc = products.map(pr => pr.name).sort().reverse();
         expect(za).toEqual(namesDesc);
 
         await inventoryPage.selectSort('lohi');
-        let lohi= await inventoryPage.getProductPrice();
-        let priceAsc=products.map(pr=>pr.price).sort((a,b)=>a-b);
+        let lohi = await inventoryPage.getProductPrice();
+        let priceAsc = products.map(pr => pr.price).sort((a, b) => a - b);
         expect(lohi).toEqual(priceAsc);
 
         await inventoryPage.selectSort('hilo');
-        let hilo= await inventoryPage.getProductPrice();
-        let priceDesc=products.map(pr=>pr.price).sort((a,b)=>b-a);
+        let hilo = await inventoryPage.getProductPrice();
+        let priceDesc = products.map(pr => pr.price).sort((a, b) => b - a);
         expect(hilo).toEqual(priceDesc);
     });
+    test('3. Product links -> each card navigates to detail page with matching title/price/desc', async ({ inventoryPage, productDetailsPage }) => {
+        // 3) Product links -> each card navigates to detail page with matching title/price/desc.
+        //    PRECONDITIE: pe inventory.
+        //    ACTIUNE: dau click pe titlu/poza produs.
+        //    REZULTAT: pagina detalii corespunde cardului.
 
+        let target = products[0];
+
+       
+
+        await inventoryPage.openDetails(target.name);
+
+        const text= await productDetailsPage.itemTitle.innerText();
+        const text2= await productDetailsPage.itemPrice.innerText();
+        const text3= await productDetailsPage.itemDescr.innerText();
+
+        await expect(productDetailsPage.itemTitle).toHaveText(target.name);
+        await expect(productDetailsPage.itemPrice).toHaveText("$"+target.price);
+        await expect(productDetailsPage.itemDescr).toHaveText(target.description);
+       
+        await productDetailsPage.backButton.click();
+
+        // await inventoryPage.openDetails(target.name);
+        // await expect(productDetailsPage.itemTitle).toHaveText(target.name);
+    });
+    test('4.Add/Remove -> toggles button label and updates cart badge count', async ({ inventoryPage }) => {
+        // 4) Add/Remove -> toggles button label and updates cart badge count.
+        //    PRECONDITIE: pe inventory, badge initial cunoscut.
+        //    ACTIUNE: Add to cart / Remove pe un item.
+        //    REZULTAT: butonul si badge-ul se actualizeaza corect.
+        await inventoryPage
+
+    });
 });
 
- test('3. Product links -> each card navigates to detail page with matching title/price/desc', async ({ inventoryPage,productDetailsPage }) => {
-// 3) Product links -> each card navigates to detail page with matching title/price/desc.
-//    PRECONDITIE: pe inventory.
-//    ACTIUNE: dau click pe titlu/poza produs.
-//    REZULTAT: pagina detalii corespunde cardului.
-
-    let target=products[0];
-
-    await inventoryPage.openDetails(target.name);
-    // await expect(productDetailsPage.itemTitle).toHaveText(target.name);
-
-    // await productDetailsPage.backButton.click();
-    
-    // await inventoryPage.openDetails(target.name);
-    // await expect(productDetailsPage.itemTitle).toHaveText(target.name);
- });
 
 
 
@@ -96,10 +112,8 @@ test.describe('# Inventory Scenarios', () => {
 
 
 
-// 4) Add/Remove -> toggles button label and updates cart badge count.
-//    PRECONDITIE: pe inventory, badge initial cunoscut.
-//    ACTIUNE: Add to cart / Remove pe un item.
-//    REZULTAT: butonul si badge-ul se actualizeaza corect.
+
+
 // 5) Persistent state -> added items remain after page refresh.
 //    PRECONDITIE: produs adaugat.
 //    ACTIUNE: refresh pagina.

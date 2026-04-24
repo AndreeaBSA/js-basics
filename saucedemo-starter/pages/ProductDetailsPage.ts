@@ -5,7 +5,8 @@ export class ProductDetailsPage {
   readonly itemTitle: Locator;
   readonly itemImage: Locator; // A
   readonly backButton: Locator; //A
-  
+  readonly itemPrice: Locator;
+  readonly itemDescr: Locator;
   
   
   constructor(page: Page) {
@@ -13,6 +14,8 @@ export class ProductDetailsPage {
     this.itemTitle = page.locator('[data-test="inventory-item-name"]');
     this.itemImage = page.locator('[data-test="inventory-item-img"]');  // A
     this.backButton = page.locator('[data-test="back-to-products"]');      // A
+    this.itemPrice = page.locator('[data-test="inventory-item-price"]');
+    this.itemDescr = page.locator('[data-test="inventory-item-desc"]');
   }
 
 
