@@ -19,6 +19,7 @@ type Pages = {
   itmDetailsPage: ItmDetailsPage;
   entitlementPage: EntitlementPage;
   mailCountPage: MailCountPage;
+
 };
 
 export const test = base.extend<Pages>({

@@ -8,6 +8,7 @@ export const routes = {
 export const transactions = {
   se16: "SE16",
   se16n: "SE16N",
+  mm03: "MM03",
 };
 
 export const tables = {

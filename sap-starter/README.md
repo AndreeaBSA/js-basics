@@ -16,8 +16,8 @@ Acest folder este punctul de plecare pentru exercitii. Structura urmeaza variant
 
 ## Suite recomandate
 - `navigation/` - activare tranzactie si schimbare intre tabele
-- `fr-parent/` - filtrare dupa `ESID` si extragere de GUID-uri
-- `cross-table/` - reutilizare GUID-uri in alte tabele
+- GUID-uri
+- `cross-table/` - reutilizare GUID-u`fr-parent/` - filtrare dupa `ESID` si extragere de ri in alte tabele
 - `entitlement/` - verificari pe `ENT_TYPE` si `ACTIVE`
 - `mailcount/` - validari pe `COUNT`, `OWNER`, `STATUS`
 - `grid-and-selectors/` - `innerText`, split pe newline, selectori pe coloane
