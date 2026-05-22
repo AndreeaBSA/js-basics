@@ -10,6 +10,7 @@ export class SapTableBrowserPage {
   readonly helperTransaction: Locator;
   readonly statusPanel: Locator;
   readonly browserActive: Locator;
+  readonly emptyState: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -20,7 +21,7 @@ export class SapTableBrowserPage {
     this.currentResults = this.page.locator(".results-panel .results-meta > span:first-child");
     this.statusPanel = this.page.locator('[data-testid="status-message-area"]');
     this.browserActive = this.page.locator('[data-testid="browser-activation-state"]');
-    
+    this.emptyState = this.page.locator('[class="status-empty"]');
     
     this.helperTransaction = this.page
       .locator(".helper-row")
@@ -31,6 +32,10 @@ export class SapTableBrowserPage {
   }
   async goTo() {
     this.page.goto("/");
-
   }
+ 
+  async getRowCount(){
+    return this.page.locator('[data-testid="result-count"]').count();
+  }
+
 }
