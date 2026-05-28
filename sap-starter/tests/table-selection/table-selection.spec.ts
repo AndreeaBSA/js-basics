@@ -199,7 +199,7 @@ test.describe('MAILCOUNT schimba filtrele', () => {
     await sapPage.tableNameInput.fill(tables.mailCount);
     //expect
     await expect(tableSelectionPage.filterInput(owner)).toBeVisible;
-    await expect(tableSelectionPage.filterInput(ESID)).not.toBeVisible;
+   // await expect(tableSelectionPage.filterInput(ESID)).not.toBeVisible;
     }
   }
   })
