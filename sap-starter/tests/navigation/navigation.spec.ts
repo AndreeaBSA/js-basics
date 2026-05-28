@@ -1,3 +1,4 @@
+import { getActiveResourcesInfo } from "node:process";
 import { test, expect } from "../../fixtures/test-fixtures.js";
 import { tables, transactions } from "../../utils/test-data.js";
 
@@ -211,9 +212,41 @@ test.describe("Navigation_11", () => {
     const selectedTransaction = transactions.se16;
     const selectedTable1 = tables.frParent;
     const selectedTable2 = tables.caseNotes;
+    const selectedTable3 = tables.itmDetails;
+    const selectedTable4 = tables.entitlement;
+    const selectedTable5 = tables.mailCount;
+    const selectedTable6 = tables.frAudit;
 
+    await sapPage.goTo();
+    await sapPage.commandInput.fill(selectedTransaction);
+    await sapPage.btnOpen.click();
+    //Act+Assert
+    await sapPage.tableNameInput.fill(selectedTable1);
+    await sapPage.btnExecute.click({ timeout: 2000 });
+    await expect(sapPage.currentResults).toHaveText(selectedTable1);
+
+    await sapPage.tableNameInput.fill(selectedTable2);
+    await sapPage.btnExecute.click({ timeout: 2000 });
+    await expect(sapPage.currentResults).toHaveText(selectedTable2);
+
+    await sapPage.tableNameInput.fill(selectedTable3);
+    await sapPage.btnExecute.click({ timeout: 2000 });
+    await expect(sapPage.currentResults).toHaveText(selectedTable3);
+
+    await sapPage.tableNameInput.fill(selectedTable4);
+    await sapPage.btnExecute.click({ timeout: 2000 });
+    await expect(sapPage.currentResults).toHaveText(selectedTable4);
+
+    await sapPage.tableNameInput.fill(selectedTable5);
+    await sapPage.btnExecute.click({ timeout: 2000 });
+    await expect(sapPage.currentResults).toHaveText(selectedTable5);
+
+    await sapPage.tableNameInput.fill(selectedTable6);
+    await sapPage.btnExecute.click({ timeout: 2000 });
+    await expect(sapPage.currentResults).toHaveText(selectedTable6);
   })
 });
+
 
 
 // 12) Tabel inexistent -> mesaj de eroare.  
@@ -259,12 +292,46 @@ test.describe("Navigation_6", () => {
 //     PRECONDITIE: am executat FR_PARENT (are coloana ESID).  
 //     ACTIUNE: execut MAILCOUNT.  
 //     REZULTAT: ESID nu mai exista in headere, MAIL_ID apare.  
-test.describe("Navigation_5", () => {
 
-  test("Schbare intre tabele", async ({ sapPage }) => {
-    const selectedTransaction = transactions.se16;
-    const selectedTable1 = tables.frParent;
-    const selectedTable2 = tables.caseNotes;
 
-  })
-});
+test.describe("6 tests",()=>{
+  const allTables=[tables.frParent,tables.itmDetails,tables.caseNotes,tables.entitlement,  tables.frAudit, tables.mailCount];
+
+  for(const bgd of allTables){
+    test(`table ${bgd} este navigabil `,async ({sapPage})=>{
+        //Arrange
+        await sapPage.goTo();
+        await sapPage.commandInput.fill(transactions.se16);
+        await sapPage.btnOpen.click();
+        //act
+        await sapPage.tableNameInput.fill(bgd);
+        await sapPage.btnExecute.click({timeout:2000});
+        //expect
+        await expect(sapPage.currentResults).toHaveText(bgd);
+    })
+  }
+
+
+})
+
+
+test.describe("18 tests - parametrizabil",()=>{
+  const allTables=[tables.frParent,tables.itmDetails,tables.caseNotes,tables.entitlement, tables.frAudit, tables.mailCount];
+  const allTransactions=[transactions.se16, transactions.se16n, transactions.mm03];
+  for(const trans of allTransactions){
+        for(const bgd of allTables){
+          test(`table ${bgd} este navigabil ${trans}`,async ({sapPage})=>{
+              //Arrange
+              await sapPage.goTo();
+              await sapPage.commandInput.fill(trans);
+              await sapPage.btnOpen.click();
+              //act
+              await sapPage.tableNameInput.fill(bgd);
+              await sapPage.btnExecute.click({timeout:2000});
+              //expect
+              await expect(sapPage.currentResults).toHaveText(bgd);
+          })
+        }
+}
+
+})

@@ -11,6 +11,7 @@ export class SapTableBrowserPage {
   readonly statusPanel: Locator;
   readonly browserActive: Locator;
   readonly emptyState: Locator;
+  readonly btnClearFilters: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -22,6 +23,7 @@ export class SapTableBrowserPage {
     this.statusPanel = this.page.locator('[data-testid="status-message-area"]');
     this.browserActive = this.page.locator('[data-testid="browser-activation-state"]');
     this.emptyState = this.page.locator('[class="status-empty"]');
+    this.btnClearFilters = this.page.getByRole("button", { name: "Clear Filters" });
     
     this.helperTransaction = this.page
       .locator(".helper-row")
@@ -31,7 +33,7 @@ export class SapTableBrowserPage {
 
   }
   async goTo() {
-    this.page.goto("/");
+   await this.page.goto("/");
   }
  
   async getRowCount(){
