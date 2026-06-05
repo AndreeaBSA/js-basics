@@ -1,9 +1,11 @@
-import type { Page } from "@playwright/test";
+import type { Page, Locator } from "@playwright/test";
 
 export class HelperPanelPage {
   readonly page: Page;
+  readonly helperPanel: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.helperPanel = this.page.locator('[data-testid="helper-panel"]');
   }
 }

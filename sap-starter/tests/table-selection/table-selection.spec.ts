@@ -23,8 +23,10 @@ test.describe('Table execution via button', () => {
     await sapPage.tableNameInput.fill(tables.frParent);
     await sapPage.btnExecute.click();
     //expect
-    //await expect(sapPage.statusPanel).toHaveText('/CFF/FR_PARENT returned \d+ matched row(s) with \d+ displayed.');
-    await expect(sapPage.statusPanel).toContainText('/CFF/FR_PARENT returned');
+   await expect(sapPage.statusPanel).toHaveText(
+      /\/CFF\/FR_PARENT returned \d+ matched row\(s\) with \d+ displayed\./
+    );
+    //await expect(sapPage.statusPanel).toContainText('/CFF/FR_PARENT returned');
   })
 });
 
@@ -71,7 +73,9 @@ test.describe('clear filter', () => {
     //expect
     await expect(sapPage.currentResults).toHaveText(entitlementTable);
     await sapPage.btnClearFilters.click();
-    await expect(sapPage.statusPanel).toContainText('Filters cleared for');
+    //await expect(sapPage.statusPanel).toContainText('Filters cleared for');
+
+    await expect(sapPage.statusPanel).toContainText(/Filters cleared for \/CFF\/ENTITLEMENT\./);
   })
 });
 
@@ -185,53 +189,164 @@ test.describe('MAILCOUNT schimba filtrele', () => {
 
   test("MAILCOUNT schimba filtrele", async ({ sapPage, tableSelectionPage }) => {
 
-    const tableFilters: Array<{ table: string, filters: string[] }> = [
-      { table: tables.mailCount, filters: ['PARENT_ID', 'OWNER', 'STATUS', ] }
-    ]
+  //   const tableFilters: Array<{ table: string, filters: string[] }> = [
+  //     { table: tables.mailCount, filters: ['PARENT_ID', 'OWNER', 'STATUS', ] }
+  //   ]
     
-    //Arrange
-    for (const { table, filters } of tableFilters){
-      for (const owner of filters) {
-    await sapPage.goTo();
-    await sapPage.commandInput.fill(transactions.se16);
-    await sapPage.btnOpen.click();
-    //act
-    await sapPage.tableNameInput.fill(tables.mailCount);
-    //expect
-    await expect(tableSelectionPage.filterInput(owner)).toBeVisible;
-   // await expect(tableSelectionPage.filterInput(ESID)).not.toBeVisible;
-    }
-  }
+  //   //Arrange
+  //   for (const { table, filters } of tableFilters){
+  //     for (const owner of filters) {
+  //       await sapPage.goTo();
+  //       await sapPage.commandInput.fill(transactions.se16);
+  //       await sapPage.btnOpen.click();
+  //       //act
+  //       await sapPage.tableNameInput.fill(tables.mailCount);
+  //       //expect
+  //       await expect(tableSelectionPage.filterInput(owner)).toBeVisible;
+  //       await expect(tableSelectionPage.filterInput(ESID)).not.toBeVisible;
+  //   }
+  // }
+
+  // sau
+
+  const visibleFilters=['PARENT_ID', 'OWNER', 'STATUS'];
+  const hiddenFilters=['ESID'];
+
+  await sapPage.goTo();
+  await sapPage.commandInput.fill(transactions.se16);
+  await sapPage.btnOpen.click();
+  await sapPage.tableNameInput.fill(tables.mailCount);
+
+  for(const filter of visibleFilters){
+
+    await expect(tableSelectionPage.filterInput(filter)).toBeVisible();
+   }
+
+   for(const filter of hiddenFilters){
+    await expect(tableSelectionPage.filterInput(filter)).not.toBeVisible();
+   }
+
+     
   })
    
 });
+
+test.describe("MAILCOUNT schimba filtrele - Parametrizabil", () => {
+
+ 
+  const tableFilters: Array<{ table: string, visible: string[], hidden: string[] }> = [
+    { table: tables.mailCount,   visible: ['PARENT_ID', 'OWNER', 'STATUS'],      hidden: ['ESID', 'ENT_TYPE'] },
+    // 7) ITM_DETAILS
+    { table: tables.itmDetails,  visible: ['PARENT_ID', 'CALLOFF', 'REGION'],    hidden: ['ESID', 'OWNER'] },
+    // 9) ENTITLEMENT
+    { table: tables.entitlement, visible: ['ENT_GUID', 'ENT_TYPE', 'ACTIVE'],    hidden: ['ESID', 'OWNER'] },
+    // 10) FR_AUDIT
+    { table: tables.frAudit,     visible: ['FR_GUID', 'EVENT_TYPE', 'CHANGED_BY'], hidden: ['ESID', 'OWNER'] },
+    // 11) CASE_NOTES
+    { table: tables.caseNotes,   visible: ['REFERENCE_ID', 'OWNER', 'PRIORITY'], hidden: ['ESID', 'ENT_TYPE'] },
+    
+  ]        
+
+
+
+  for(const{table,visible,hidden} of tableFilters){
+
+
+      test(`tabel ${table} expune ${visible} si ascunde ${hidden}`,async ({sapPage, tableSelectionPage })=>{
+ 
+        await sapPage.goTo();
+        await sapPage.commandInput.fill(transactions.se16);
+        await sapPage.btnOpen.click();
+        await sapPage.tableNameInput.fill(table);
+       
+        for(const filter of visible){
+          await expect(tableSelectionPage.filterInput(filter)).toBeVisible();
+        }
+
+        for(const filter of hidden){
+          await expect(tableSelectionPage.filterInput(filter)).not.toBeVisible();
+        }
+      })
+
+    }
+
+
+
+
+// test(
+//   await sapPage.goTo();
+//   await sapPage.commandInput.fill(transactions.se16);
+//   await sapPage.btnOpen.click();
+//   await sapPage.tableNameInput.fill(tables.mailCount);
+
+//   for(const filter of visibleFilters){
+
+//     await expect(tableSelectionPage.filterInput(filter)).toBeVisible();
+//    }
+
+//    for(const filter of hiddenFilters){
+//     await expect(tableSelectionPage.filterInput(filter)).not.toBeVisible();
+//    }
+
+     
+//   })
+   
+});
+
 
 // 7) ITM_DETAILS expune PARENT_ID si REGION.  
 //    PRECONDITIE: tranzactia este activa.  
 //    ACTIUNE: selectez ITM_DETAILS.  
 //    REZULTAT: filtrele PARENT_ID si REGION sunt vizibile.  
 
-test.describe('Header change', () => {
-
-  test("Header change", async ({ sapPage }) => {
-    //Arrange
-    await sapPage.goTo();
-    await sapPage.commandInput.fill(transactions.se16);
-    await sapPage.btnOpen.click();
-    await sapPage.tableNameInput.fill(tables.entitlement);
-    await sapPage.btnExecute.click();
-    await expect(sapPage.currentResults).toHaveText('/CFF/ENTITLEMENT');
-    //act
-    await sapPage.tableNameInput.fill(tables.frParent);
-    await sapPage.btnExecute.click();
-    //expect
-    await expect(sapPage.currentResults).toHaveText('/CFF/FR_PARENT');
-  })
-});
+//done 
 
 // 8) Schimbare tabel reseteaza filtrele.
 //    PRECONDITIE: am completat filtrul ESID pe FR_PARENT.
 //    ACTIUNE: schimb la MAILCOUNT.
 //    REZULTAT: filtrele vechi dispar, filtrele noi sunt goale.  
 
+
+test.describe("MAILCOUNT schimba filtrele - Parametrizabil", () => {
+
+  const transitions: Array<{
+     from:{table:string,filters:string,value:string},
+     to:{table:string ,newFilters:string[]} }> = [
+        {
+           from:{table:tables.frParent,filters:'ESID',value:"test"},
+           to:{table:tables.mailCount, newFilters:['PARENT_ID', 'OWNER', 'STATUS']}
+        },
+          {
+           from:{table:tables.frParent,filters:'ESID',value:"test"},
+           to:{table:tables.itmDetails, newFilters:['PARENT_ID', 'CALLOFF', 'REGION']}
+        },
+          {
+           from:{table:tables.frParent,filters:'ESID',value:"test"},
+           to:{table:tables.entitlement, newFilters:['ENT_GUID', 'ENT_TYPE', 'ACTIVE']}
+        },
+          {
+           from:{table:tables.frParent,filters:'ESID',value:"test"},
+           to:{table:tables.frAudit, newFilters:['FR_GUID', 'EVENT_TYPE', 'CHANGED_BY']}
+        }
+     ]
+
+for(const{from, to} of transitions){
+  test(`table ${from.table} go to ${to.table} : filtru ${from.filters} dispare, filtrele noi sunt goale `, async({sapPage, tableSelectionPage})=>{
+    
+        await sapPage.goTo();
+        await sapPage.commandInput.fill(transactions.se16);
+        await sapPage.btnOpen.click();
+        await sapPage.tableNameInput.fill(from.table);
+        await sapPage.btnExecute.click();
+        await sapPage.tableNameInput.fill(to.table);
+        await expect(tableSelectionPage.filterInput(from.filters)).not.toBeVisible();
+       for (const filter of to.newFilters){
+        await expect(tableSelectionPage.filterInput(filter)).toHaveValue('');
+       }
+
+  })
+
+}
+
+});
 

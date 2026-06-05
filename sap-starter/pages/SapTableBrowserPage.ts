@@ -12,6 +12,7 @@ export class SapTableBrowserPage {
   readonly browserActive: Locator;
   readonly emptyState: Locator;
   readonly btnClearFilters: Locator;
+  readonly filterESID: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -24,7 +25,9 @@ export class SapTableBrowserPage {
     this.browserActive = this.page.locator('[data-testid="browser-activation-state"]');
     this.emptyState = this.page.locator('[class="status-empty"]');
     this.btnClearFilters = this.page.getByRole("button", { name: "Clear Filters" });
-    
+    this.filterESID = this.page.getByLabel("filter-input-esid");
+
+
     this.helperTransaction = this.page
       .locator(".helper-row")
       .filter(({ hasText: 'Transaction' }))
@@ -32,6 +35,7 @@ export class SapTableBrowserPage {
       .last();
 
   }
+
   async goTo() {
    await this.page.goto("/");
   }
