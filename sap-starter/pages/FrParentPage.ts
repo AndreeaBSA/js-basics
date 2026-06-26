@@ -16,12 +16,12 @@ export class FrParentPage {
   }
   //todo
   filterInput(key:string):Locator{
-    return this.page.getByPlaceholder(new RegExp(`Filter by \\s+${key}`,"i"));
+    return this.page.getByPlaceholder(new RegExp(`Filter by\\s+${key}`,"i"));
   }
   tableCell(key:number, columnName: string ): Locator{
-  return this.page.locator(`tbody tr[data-row-index]=${key}`).locator(`td[data-column-name]=${columnName}`);
+  return this.page.locator(`tbody tr[data-row-index="${key}"]`).locator(`[data-column-name="${columnName}"]`);
   }
   getRowCount(){
-    return this.page.locator(`tbody[data-row-index]`).count();
+    return this.page.locator(`tbody tr[data-row-index]`).count();
   }
 }
