@@ -22,6 +22,14 @@ export const tables = {
 
 export const emptyGuid = "00000000000000000000000000000000";
 
+export const columnsFrParent = {
+  ESID: "ESID",
+  FR_GUID: "FR_GUID",
+  ENT_GUID: "ENT_GUID",
+  STATUS: "STATUS",
+  DESCRIPTION: "DESCRIPTION",
+};
+
 export const automationAnchor = {
   esid: "ESID-777",
   expectedValues: {

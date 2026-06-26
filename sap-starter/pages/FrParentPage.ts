@@ -4,24 +4,24 @@ export class FrParentPage {
   readonly page: Page;
   readonly filterESID: Locator;
   readonly filterFRGUID: Locator;
-  readonly filterSTATUS: Locator;
-
-
 
   constructor(page: Page) {
     this.page = page;
-    this.filterESID = this.filterInput('ESID');
-    this.filterFRGUID = this.filterInput('FR_GUID');
-    this.filterSTATUS = this.filterInput('STATUS');
+    this.filterESID = this.filterInput("ESID");
+    this.filterFRGUID = this.filterInput("FR_GUID");
   }
-  //todo
-  filterInput(key:string):Locator{
-    return this.page.getByPlaceholder(new RegExp(`Filter by\\s+${key}`,"i"));
+
+  filterInput(key: string): Locator {
+    return this.page.getByPlaceholder(new RegExp(`Filter by\\s+${key}$`, "i"));
   }
-  tableCell(key:number, columnName: string ): Locator{
-  return this.page.locator(`tbody tr[data-row-index="${key}"]`).locator(`[data-column-name="${columnName}"]`);
+
+  tableCell(rowIndex: number, columnName: string): Locator {
+    return this.page
+      .locator(`tbody tr[data-row-index="${rowIndex}"]`)
+      .locator(`[data-column-name="${columnName}"]`);
   }
-  getRowCount(){
-    return this.page.locator(`tbody tr[data-row-index]`).count();
+
+  async getRowCount(): Promise<number> {
+    return this.page.locator("tbody tr[data-row-index]").count();
   }
 }
