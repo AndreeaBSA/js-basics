@@ -58,4 +58,12 @@ export const knownQueries: Record<string, TableQuery> = {
     transaction: transactions.se16,
     tableName: tables.itmDetails,
   },
+
+};
+export const columnsFrParent = {
+  ESID: "ESID",
+  FR_GUID: "FR_GUID",
+  ENT_GUID: "ENT_GUID",
+  STATUS: "STATUS",
+  DESCRIPTION: "DESCRIPTION",
 };

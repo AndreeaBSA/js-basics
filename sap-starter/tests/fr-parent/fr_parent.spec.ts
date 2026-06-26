@@ -48,22 +48,20 @@ test.describe('BEGINER - Table FR_Parent', () => {
     await expect(frParentPage.tableCell(0,columnsFrParent.FR_GUID)).toHaveText(expectedfrGuid);
   })
 
-test("Multiple Filter", async ({ sapPage, frParentPage}) =>{
-//Arrange
-await sapPage.goTo();
-await sapPage.commandInput.fill(transactions.se16);
-await sapPage.btnOpen.click();
-//act
-await sapPage.tableNameInput.fill(tables.frParent);
-await sapPage.btnExecute.click();
+      test("Multiple Filter", async ({ sapPage, frParentPage}) =>{
+      //Arrange
+      await sapPage.goTo();
+      await sapPage.commandInput.fill(transactions.se16);
+      await sapPage.btnOpen.click();
+      //act
+      await sapPage.tableNameInput.fill(tables.frParent);
+      await sapPage.btnExecute.click();
 
-await frParentPage.filterESID.fill(`ESID-100`);
-
-const rows = 
-await expect(frParentPage.getRowCount()).toEqual('4');
+      await frParentPage.filterESID.fill(`ESID-100`);
+       expect(frParentPage.getRowCount()).toEqual('4');
 
 
-//expect(frParentPage.getRowCount());
+      //expect(frParentPage.getRowCount());
 
 });
 
