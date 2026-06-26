@@ -1,3 +1,4 @@
+import { executionAsyncId } from "node:async_hooks";
 import type { ExtractedValues } from "../models/ExtractedValues.js";
 import type { TableQuery } from "../models/TableQuery.js";
 
@@ -59,3 +60,11 @@ export const knownQueries: Record<string, TableQuery> = {
     tableName: tables.itmDetails,
   },
 };
+
+export const columnsFrParent = {
+  ESID:"ESID",
+  FR_GUID: 'FR_GUID',
+  ENT_GUID: 'ENT_GUID',
+  STATUS: 'STATUS',
+  DESCRIPTION: 'DESCRIPTION'
+}
