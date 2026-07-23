@@ -41,80 +41,80 @@ test.describe('BEGINER - Table FR_Parent', () => {
     //act
     await sapPage.tableNameInput.fill(tables.frParent);
     await sapPage.btnExecute.click();
-    
+
     const expectedfrGuid = 'FR0000000000000000000000001389';
     await frParentPage.filterESID.fill(automationAnchor.esid)
     //expect
-    await expect(frParentPage.tableCell(0,columnsFrParent.FR_GUID)).toHaveText(expectedfrGuid);
+    await expect(frParentPage.tableCell(0, columnsFrParent.FR_GUID)).toHaveText(expectedfrGuid);
   })
 
-   test("Multiple Filter", async ({ sapPage, frParentPage}) =>{
-      //Arrange
-      await sapPage.goTo();
-      await sapPage.commandInput.fill(transactions.se16);
-      await sapPage.btnOpen.click();
-      //act
-      await sapPage.tableNameInput.fill(tables.frParent);
-      await sapPage.btnExecute.click();
+  test("Multiple Filter", async ({ sapPage, frParentPage }) => {
+    //Arrange
+    await sapPage.goTo();
+    await sapPage.commandInput.fill(transactions.se16);
+    await sapPage.btnOpen.click();
+    //act
+    await sapPage.tableNameInput.fill(tables.frParent);
+    await sapPage.btnExecute.click();
 
-      await frParentPage.filterESID.fill(`ESID-100`);
+    await frParentPage.filterESID.fill(`ESID-100`);
 
-      await expect(await frParentPage.getRowCount()).toEqual('4');
+    await expect(await frParentPage.getRowCount()).toEqual('4');
 
 
-      //expect(frParentPage.getRowCount());
+    //expect(frParentPage.getRowCount());
 
   });
 
-test("2) Multiple Filter", async ({ sapPage, frParentPage}) =>{
-//Arrange
-await sapPage.goTo();
-await sapPage.commandInput.fill(transactions.se16);
-await sapPage.btnOpen.click();
-//act
-await sapPage.tableNameInput.fill(tables.frParent);
-await sapPage.btnExecute.click();
+  test("2) Multiple Filter", async ({ sapPage, frParentPage }) => {
+    //Arrange
+    await sapPage.goTo();
+    await sapPage.commandInput.fill(transactions.se16);
+    await sapPage.btnOpen.click();
+    //act
+    await sapPage.tableNameInput.fill(tables.frParent);
+    await sapPage.btnExecute.click();
 
-await frParentPage.filterESID.fill(`ESID-100`);
-
-
-await expect(frParentPage.getRowCount()).toEqual('4');
+    await frParentPage.filterESID.fill(`ESID-100`);
 
 
-//expect(frParentPage.getRowCount());
-
-});
-
-test("3) Filter submit by Enter", async ({ sapPage, frParentPage}) =>{
-//Arrange
-await sapPage.goTo();
-await sapPage.commandInput.fill(transactions.se16);
-await sapPage.btnOpen.click();
-//act
-await sapPage.tableNameInput.fill(tables.frParent);
-await sapPage.btnExecute.click();
-
-await frParentPage.filterESID.fill(`ESID`);
-await sapPage.tableNameInput.press('Enter');
-const selectedTable1 = tables.frParent;
-await expect(sapPage.currentResults).toHaveText(selectedTable1);
-});
+    await expect(frParentPage.getRowCount()).toEqual('4');
 
 
-      test("4) FR_GUID lookup", async ({ sapPage, frParentPage}) =>{
-          //Arrange
-          await sapPage.goTo();
-          await sapPage.commandInput.fill(transactions.se16);
-          await sapPage.btnOpen.click();
-          //act
-          await sapPage.tableNameInput.fill(tables.frParent);
-          await sapPage.btnExecute.click();
+    //expect(frParentPage.getRowCount());
 
-          await frParentPage.filterFRGUID.fill(secondaryAnchor.esid);
-      
-          //expect
-          const expectedfrGuid = 'FR00000000000000000000000000A556';
-          await expect(frParentPage.tableCell(1,columnsFrParent.FR_GUID)).toHaveText(expectedfrGuid);
-      });
+  });
+
+  test("3) Filter submit by Enter", async ({ sapPage, frParentPage }) => {
+    //Arrange
+    await sapPage.goTo();
+    await sapPage.commandInput.fill(transactions.se16);
+    await sapPage.btnOpen.click();
+    //act
+    await sapPage.tableNameInput.fill(tables.frParent);
+    await sapPage.btnExecute.click();
+
+    await frParentPage.filterESID.fill(`ESID`);
+    await sapPage.tableNameInput.press('Enter');
+    const selectedTable1 = tables.frParent;
+    await expect(sapPage.currentResults).toHaveText(selectedTable1);
+  });
+
+
+  test("4) FR_GUID lookup", async ({ sapPage, frParentPage }) => {
+    //Arrange
+    await sapPage.goTo();
+    await sapPage.commandInput.fill(transactions.se16);
+    await sapPage.btnOpen.click();
+    //act
+    await sapPage.tableNameInput.fill(tables.frParent);
+    await sapPage.btnExecute.click();
+
+    await frParentPage.filterFRGUID.fill(secondaryAnchor.esid);
+
+    //expect
+    const expectedfrGuid = 'FR00000000000000000000000000A556';
+    await expect(frParentPage.tableCell(1, columnsFrParent.FR_GUID)).toHaveText(expectedfrGuid);
+  });
 
 });

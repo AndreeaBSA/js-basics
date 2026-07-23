@@ -65,10 +65,9 @@ test.describe("FR Parent - optim", () => {
   for (const c of rowCountCases) {
     test(`row count: ${c.title}`, async ({ sapPage }) => {
       await sapPage.executeTable(tables.frParent, c.filters);
-
       await expect(sapPage.currentResults).toHaveText(tables.frParent);
       await expect(sapPage.resultCount).toContainText(`${c.count} rows`);
-      expect(await sapPage.getRowCount()).toBe(c.count);
+      await expect(await sapPage.getRowCount()).toBe(c.count);
     });
   }
 
