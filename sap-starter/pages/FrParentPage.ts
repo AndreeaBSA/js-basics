@@ -4,11 +4,13 @@ export class FrParentPage {
   readonly page: Page;
   readonly filterESID: Locator;
   readonly filterFRGUID: Locator;
+  readonly filterSTATUS: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.filterESID = this.filterInput("ESID");
     this.filterFRGUID = this.filterInput("FR_GUID");
+    this.filterSTATUS = this.filterInput("STATUS");
   }
 
   filterInput(key: string): Locator {
