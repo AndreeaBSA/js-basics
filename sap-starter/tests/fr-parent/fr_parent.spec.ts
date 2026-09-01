@@ -1,6 +1,6 @@
 import { test, expect } from "../../fixtures/test-fixtures.js";
 import { FrParentPage } from "../../pages/FrParentPage.js";
-import { automationAnchor, columnsFrParent, secondaryAnchor, tables, tertiaryAnchor, transactions } from "../../utils/test-data.js";
+import { automationAnchor, columnsFrParent, secondaryAnchor, tables, tertiaryAnchor, transactions, emptyGuid } from "../../utils/test-data.js";
 
 
 // ## BEGINNER
@@ -202,7 +202,7 @@ test('8. Blocked row', async ({ sapPage, frParentPage }) => {
   await expect(sapPage.resultCount).toBeVisible();
 
   const rowIndex = await sapPage.findFirstRowIndexByColumnValue("ESID", tertiaryAnchor.esid);
-  const emptyGuid = "00000000000000000000000000000000";
+  //const emptyGuid = "00000000000000000000000000000000";
   console.log(rowIndex);
 
   expect(rowIndex).toBeGreaterThanOrEqual(0);
@@ -236,11 +236,11 @@ test('9. Active rows', async ({ sapPage, frParentPage }) => {
 // PARAMETRIZABIL
 
 const rowCountByEsid: { esid: string; count: number }[] = [
-  { esid: 'ESID-', count: 3 },
+  { esid: 'ESID-100', count: 4 },
   { esid: automationAnchor.esid, count: 1 }
 ]
 
-const statusOnly: string[] = ['ACTIVE', 'BlOCKED'];
+const statusOnly: string[] = ['Active', 'Blocked'];
 
 type ExpectedCells = Record<string, string>;
 
@@ -295,13 +295,78 @@ test.describe('Middle-Parametrizabil', () => {
     })
   }
 
-  for (const rowCountByEsid of statusOnly) {
-    test(`toate ${rowCountByEsid} randurile returnate au STATUS = Active` )
+  //todo de terminat pe statusOnly rowCountByEsid
+  //x=3; x++  x devine 4
+  //     x+=7 => x=x+7 x devine 10
+
+  for ( const status of statusOnly) {
+    test(`Validation of ${status}`, async ({sapPage, frParentPage}) => {
+      //Arrange
+      await sapPage.goTo();
+      await sapPage.commandInput.fill(transactions.se16);
+      await sapPage.btnOpen.click();
+      //act
+      await sapPage.tableNameInput.fill(tables.frParent);
+      await frParentPage.filterSTATUS.fill(status);
+      await sapPage.btnExecute.click();
+
+      //assert
+      await expect(sapPage.resultCount).toBeVisible();
+      const rowCount = await sapPage.getRowCount();
+      expect(rowCount).toBeGreaterThan(1);
+      for (let index = 0; index < rowCount; index++) {
+        console.log(rowCount);
+        await expect(frParentPage.tableCell(0, 'STATUS')).toContainText(status);
+      }
+    })
   }
 
-  //todo de terminat pe statusOnly rowCountByEsid
+
+  for ( const rowNumber of rowCountByEsid) {
+    test(` row count ${rowNumber.count}`, async ({sapPage, frParentPage}) => {
+      //Arrange
+      await sapPage.goTo();
+      await sapPage.commandInput.fill(transactions.se16);
+      await sapPage.btnOpen.click();
+      //act
+      await sapPage.tableNameInput.fill(tables.frParent);
+      await frParentPage.filterESID.fill(rowNumber.esid);
+      await sapPage.btnExecute.click();
+
+      //assert
+      await expect(sapPage.resultCount).toBeVisible();
+      const rowCount = await sapPage.getRowCount();
+      
+      await expect.poll(()=>frParentPage.getRowCount()).toBe(rowNumber.count);
+    })
+  }
+
+
+
+
 
 
 })
 
 
+
+// Advanced - PARAMETRIZABIL
+
+const singleRowByEsidExperienced:{title:string; filters:ExpectedCells;expected:ExpectedCells}[]=[
+{
+  title: 'ESID-778->Status Pending', filters:{ESID:secondaryAnchor.esid},expected:{STATUS:'PENDING'}
+},
+{
+ title: 'ESID-780->Status Archived', filters:{ESID:'ESID-780'}, expected:{Status:'Archived'}
+},
+{
+ title: 'FR_GUID lookup -ESID-777', filters:{ESID:automationAnchor.esid}, expected:{ESID:automationAnchor.esid}
+},
+{
+ title: 'ESID-779->Status Blocked', filters:{ESID:tertiaryAnchor.esid},expected:{ENT_GUID: tertiaryAnchor.expectedValues.entGuid, STATUS:'Blocked'}
+},
+
+
+]
+
+const statusOnlyExperienced: string[] = ['Archived', 'Pending', 'Blocked'];

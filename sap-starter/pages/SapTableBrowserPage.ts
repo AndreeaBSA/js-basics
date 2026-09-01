@@ -6,10 +6,13 @@ export class SapTableBrowserPage {
   readonly btnOpen: Locator;
   readonly tableNameInput: Locator;
   readonly btnExecute: Locator;
-  readonly currentResults: Locator
+  readonly btnClearFilters: Locator;
+  readonly currentResults: Locator;
+  readonly currentTableNameResults: Locator;
   readonly resultCount: Locator;
   readonly resultsTable: Locator;
   readonly helperTransaction: Locator;
+  readonly helperCurrentTable: Locator;
   readonly statusPanel: Locator;
   readonly browserActive: Locator;
   readonly keyboard: Keyboard;
@@ -21,13 +24,16 @@ export class SapTableBrowserPage {
     this.resultsTable = page.locator(".results-table");
     this.commandInput = page.getByLabel("Transaction");
     this.btnOpen = this.page.getByRole("button", { name: "Open" });
-    this.tableNameInput = page.getByLabel("Table Name");
     this.btnExecute = this.page.getByRole("button", { name: "Execute" });
+    this.btnClearFilters = this.page.getByRole("button", { name: "Clear Filters" });
+    this.tableNameInput = page.getByLabel("Table Name");
     this.currentResults = this.page.locator(".results-panel .results-meta > span:first-child");
+    this.currentTableNameResults = this.page.locator('[data-testid="current-table-name"]');
     this.statusPanel = this.page.locator('[data-testid="status-message-area"]');
     this.browserActive = this.page.locator('[data-testid="browser-activation-state"]');
-    
-    
+    this.helperCurrentTable = this.page.locator('[data-testid="helper-current-table"]');
+
+
     this.helperTransaction = this.page
       .locator(".helper-row")
       .filter(({ hasText: 'Transaction' }))

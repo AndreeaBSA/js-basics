@@ -54,9 +54,9 @@ test.describe("FR Parent - optim", () => {
   for (const c of singleRowCases) {
     test(`single row: ${c.title}`, async ({ sapPage }) => {
       await sapPage.executeTable(tables.frParent, c.filters);
-
       await expect(sapPage.resultCount).toContainText("1 rows");
       for (const [column, value] of Object.entries(c.expected)) {
+        console.log(column+":"+value)
         await expect(sapPage.cell(0, column)).toHaveText(value);
       }
     });

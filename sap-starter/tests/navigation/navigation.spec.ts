@@ -41,7 +41,7 @@ test.describe("Navigation_2", () => {
     await sapPage.goTo();
     await sapPage.commandInput.fill(selectedTransaction);
     await sapPage.btnOpen.click();
-    await sapPage.tableNameInput.fill(selectedTable).press('Enter');  //(1)
+    await sapPage.tableNameInput.fill(selectedTable);
     await sapPage.keyboard.press('Enter'); //(2)
     await expect(sapPage.currentResults).toHaveText(selectedTable);
     await expect(sapPage.helperTransaction).toHaveText(selectedTransaction);
@@ -97,7 +97,7 @@ test.describe("Navigation_4", () => {
 
 test.describe("Navigation_5", () => {
 
-  test("Schimbare intre tabele", async ({ sapPage }) => {
+  test("5) Schimbare intre tabele", async ({ sapPage }) => {
     const selectedTransaction = transactions.se16;
     const selectedTable1 = tables.frParent;
     const selectedTable2 = tables.caseNotes;
@@ -123,27 +123,115 @@ test.describe("Navigation_5", () => {
     });
 
 // sau - loop  ???
+  });
 
+  test("6) Helper panel inainte de executie", async ({ sapPage }) => {
+      //Preconditie
+      await sapPage.goTo();
+      await sapPage.commandInput.fill(transactions.se16);
+      await sapPage.btnOpen.click();
+      //Actiune
+      await sapPage.tableNameInput.fill(tables.caseNotes);
+      //Rezultat
+      await expect(sapPage.helperCurrentTable).toContainText(tables.caseNotes);
+  });
 
-  })
+  test("7) Helper panel dupa executie", async ({ sapPage }) => {
+      await sapPage.goTo();
+      await sapPage.commandInput.fill(transactions.se16);
+      await sapPage.btnOpen.click();
+      await sapPage.tableNameInput.fill(tables.caseNotes);
+      await sapPage.btnExecute.click();
+      await expect(sapPage.helperCurrentTable).toContainText(tables.caseNotes);
+      await expect(sapPage.helperTransaction).toContainText(transactions.se16);
+  });
+
+  test("8) Tranzactia din helper", async ({ sapPage }) => {
+      await sapPage.goTo();
+      await sapPage.commandInput.fill(transactions.se16n);
+      await sapPage.btnOpen.click();
+      await expect(sapPage.helperTransaction).toContainText(transactions.se16n);
+  });
+
 });
 
 
+//************  EXPERIENCED  ***********
+
+test.describe('Experienced - NAVIGATION', () => {
+    test('Navigare FR_PARENT -> MAILCOUNT', async ({ sapPage }) => {
+        await sapPage.goTo();
+        await sapPage.commandInput.fill('se16');
+        await sapPage.keyboard.press('Enter');
+        await sapPage.tableNameInput.fill(tables.frParent);
+        await sapPage.btnExecute.click();
+        await expect(sapPage.helperCurrentTable).toContainText(tables.frParent);
+        
+        await sapPage.tableNameInput.fill(tables.mailCount);
+        await sapPage.btnExecute.click();
+        await expect(sapPage.helperCurrentTable).toContainText(tables.mailCount);
+        await expect(sapPage.helperTransaction).toContainText(transactions.se16);
+    });
+
+    test('10) Navigare circulara -> FR_PARENT -> ITM_DETAILS -> FR_PARENT', async ({ sapPage }) => {
+        await sapPage.goTo();
+        await sapPage.commandInput.fill('Se16N');
+        await sapPage.keyboard.press('Enter');
+        await sapPage.tableNameInput.fill(tables.frParent);
+        await sapPage.btnExecute.click();
+        await expect(sapPage.helperCurrentTable).toContainText(tables.frParent);
+        
+        await sapPage.tableNameInput.fill(tables.itmDetails);
+        await sapPage.btnExecute.click();
+        await expect(sapPage.helperCurrentTable).toContainText(tables.itmDetails);
+
+        await sapPage.tableNameInput.fill(tables.frParent);
+        await sapPage.btnExecute.click();
+        await expect(sapPage.currentResults).toContainText(tables.frParent);
+    });
+
+    test('11) Toate cele 6 tabele sunt navigabile.', async ({ sapPage }) => {
+        await sapPage.goTo();
+        await sapPage.commandInput.fill(transactions.mm03);
+        await sapPage.keyboard.press('Enter');
+        await expect(sapPage.browserActive).toContainText('Awaiting Transaction');
+        await sapPage.commandInput.fill(transactions.se16);
+        await sapPage.keyboard.press('Enter');
+        await expect(sapPage.browserActive).toContainText('Browser Ready');
+    });
+
+    test('12) Tabel inexistent', async ({ sapPage }) => {
+        await sapPage.goTo();
+        await sapPage.commandInput.fill('Se16');
+        await sapPage.keyboard.press('Enter');
+        await sapPage.tableNameInput.fill(`/CFF/INEXISTENT`);
+        await sapPage.btnExecute.click();
+        await expect(sapPage.statusPanel).toContainText('No data found');
+    });
+
+    test('13) Numele tabelului case-insensitive', async ({ sapPage }) => {
+        await sapPage.goTo();
+        await sapPage.commandInput.fill('Se16');
+        await sapPage.keyboard.press('Enter');
+        await sapPage.tableNameInput.fill(`/cff/fr_parent`);
+        await sapPage.btnExecute.click();
+        await expect(sapPage.statusPanel).toContainText('/CFF/FR_PARENT returned 34 matched row(s)');
+    });
+
+    test('14) Headere se schimba la navigare', async ({ sapPage }) => {
+        await sapPage.goTo();
+        await sapPage.commandInput.fill('Se16');
+        await sapPage.keyboard.press('Enter');
+        await sapPage.tableNameInput.fill(tables.frParent);
+        await sapPage.btnExecute.click();
+        await expect(sapPage.resultsTable).toContainText('ESID');
+        await sapPage.tableNameInput.fill(tables.mailCount);
+        await sapPage.btnExecute.click();
+        await expect(sapPage.resultsTable).toContainText('MAIL_ID');
+    });
 
 
 
 
-// 6) Helper panel inainte de executie -> reflecta selectia curenta.
-//    PRECONDITIE: tranzactia este activa.
-//    ACTIUNE: schimb tabelul fara a executa.
-//    REZULTAT: helper panel afiseaza tabelul nou selectat.
 
-// 7) Helper panel dupa executie -> reflecta tabelul incarcat.
-//    PRECONDITIE: am selectat si executat un tabel.
-//    ACTIUNE: inspectez helper panel.
-//    REZULTAT: helper panel arata tabelul executat si tranzactia activa.
-
-// 8) Tranzactia din helper -> SE16 sau SE16N apare corect.
-//    PRECONDITIE: am deschis SE16N.
-//    ACTIUNE: inspectez helper panel.
-//    REZULTAT: campul Transaction arata `SE16N`.  
+});
