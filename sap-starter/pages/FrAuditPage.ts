@@ -8,9 +8,9 @@ export class FrAuditPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.filterFRGUID = this.filterInput("FR GUID");
-    this.filterEVENTTYPE = this.filterInput("EVENT TYPE");
-    this.filterCHANGEDBY = this.filterInput("CHANGED BY");
+    this.filterFRGUID = this.filterInput("FR_GUID");
+    this.filterEVENTTYPE = this.filterInput("EVENT_TYPE");
+    this.filterCHANGEDBY = this.filterInput("CHANGED_BY");
   }
 
 filterInput(key: string): Locator {
