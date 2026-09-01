@@ -1,6 +1,6 @@
 import type { Page, Locator } from "@playwright/test";
 
-export class EntitlementPage {
+export class FrAuditPage {
   readonly page: Page;
     readonly filterFRGUID: Locator;
     readonly filterEVENTTYPE: Locator;

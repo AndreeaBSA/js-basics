@@ -1,7 +1,6 @@
 
 import { test, expect } from "../../fixtures/test-fixtures.js";
 import { tables, transactions } from "../../utils/test-data.js";
-//import { FrAuditPage } from "../../pages/FrAuditPage.js"
 
 // ********  BEGINNER  **********
 
@@ -36,7 +35,7 @@ test.describe('Beginer - Table Selection', () => {
         await expect(sapPage.statusPanel).toContainText('Filters cleared');
     });
 
-    test('4) Headerele se schimba cu tabelul.', async ({ sapPage, mailCountPage,  }) => {
+    test('4) Headerele se schimba cu tabelul.', async ({ sapPage, mailCountPage,frAuditPage}) => {
         await sapPage.goTo();
         await sapPage.commandInput.fill(transactions.se16);
         await sapPage.keyboard.press('Enter');
@@ -46,5 +45,8 @@ test.describe('Beginer - Table Selection', () => {
         await expect(mailCountPage.filterSTATUS).toBeEnabled();
         await sapPage.tableNameInput.fill(tables.frAudit);
         await sapPage.btnExecute.click();
+        await expect(frAuditPage.filterFRGUID).toBeEnabled();
+        await expect(frAuditPage.filterCHANGEDBY).toBeEnabled();
+        await expect(frAuditPage.filterEVENTTYPE).toBeEnabled();
     });
 });

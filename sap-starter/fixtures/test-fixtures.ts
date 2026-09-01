@@ -8,6 +8,7 @@ import { MailCountPage } from "../pages/MailCountPage.js";
 import { ResultsGridPage } from "../pages/ResultsGridPage.js";
 import { SapTableBrowserPage } from "../pages/SapTableBrowserPage.js";
 import { TableSelectionPage } from "../pages/TableSelectionPage.js";
+import { FrAuditPage } from "../pages/FrAuditPage.js";
 
 type Pages = {
   sapPage: SapTableBrowserPage;
@@ -19,6 +20,7 @@ type Pages = {
   itmDetailsPage: ItmDetailsPage;
   entitlementPage: EntitlementPage;
   mailCountPage: MailCountPage;
+  frAuditPage: FrAuditPage;
 
 };
 
@@ -49,6 +51,9 @@ export const test = base.extend<Pages>({
   },
   mailCountPage: async ({ page }, use) => {
     await use(new MailCountPage(page));
+  },
+  frAuditPage: async ({ page }, use) => {
+    await use(new FrAuditPage(page));
   },
 });
 
