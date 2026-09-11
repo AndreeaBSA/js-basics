@@ -16,6 +16,8 @@ export class SapTableBrowserPage {
   readonly statusPanel: Locator;
   readonly browserActive: Locator;
   readonly keyboard: Keyboard;
+  readonly filtersSelection: Locator;
+  readonly columnHeaderRow: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -32,6 +34,8 @@ export class SapTableBrowserPage {
     this.statusPanel = this.page.locator('[data-testid="status-message-area"]');
     this.browserActive = this.page.locator('[data-testid="browser-activation-state"]');
     this.helperCurrentTable = this.page.locator('[data-testid="helper-current-table"]');
+    this.filtersSelection = this.page.locator('[data-testid="table-selection-area"]');
+    this.columnHeaderRow = this.page.locator('[data-testid="table-header-row"]')
 
 
     this.helperTransaction = this.page
@@ -61,6 +65,14 @@ export class SapTableBrowserPage {
     }
     await this.btnExecute.click();
     await this.resultsTable.waitFor({ state: "visible" });
+  }
+
+  async navigateToTable(transaction: string, table: string, ){
+    await this.goTo();
+    await this.commandInput.fill(transaction);
+    await this.keyboard.press('Enter');
+    await this.tableNameInput.fill(table);
+    await this.btnExecute.click();
   }
 
   async submitFilterWithEnter(key: string, value: string) {
@@ -100,4 +112,12 @@ export class SapTableBrowserPage {
     }
     return -1;
   }
+
+
+
+
+
+
+
+
 }

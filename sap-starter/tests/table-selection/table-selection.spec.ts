@@ -1,8 +1,9 @@
 
 import { test, expect } from "../../fixtures/test-fixtures.js";
 import { SapTableBrowserPage } from "../../pages/SapTableBrowserPage.js";
-import { tables, transactions } from "../../utils/test-data.js";
+import { tables, transactions, filters, columnsFrParent } from "../../utils/test-data.js";
 import { openBrowserTransaction } from "../../utils/actions.js";
+import { MailCountPage } from "../../pages/MailCountPage.js";
 
 // ********  BEGINNER  **********
 
@@ -119,61 +120,169 @@ const tableCases: TableCase[] = [
         filters: ["PARENT_ID", "OWNER", "STATUS"],
         columns: ["MAIL_ID", "PARENT_ID", "COUNT", "OWNER", "STATUS"],
     },
+
+        {
+        title: "ITEMDETAILS",
+        table: tables.itmDetails,
+        filters: ["PARENT_ID", "CALLOFF", "REGION"],
+        columns: ["PARENT_ID", "CALLOFF", "NWR_ITEM_ID", "REGION", "COMMENTS"],
+    },
 ]
 
 
 
 
-test.describe("Table seelction - optim",()=>{
-     test.beforeEach(async ({ sapPage }) => {
+test.describe("Table selection - optim", () => {
+    test.beforeEach(async ({ sapPage }) => {
         await openBrowserTransaction(sapPage);
-      });
+    });
 
-    for( const c of tableCases) {
-        test(`filtre ${c.title} expune exact filtrele lui`,async ({sapPage})=>{
+    for (const c of tableCases) {
+        test(`filtre ${c.title} expune exact filtrele lui`, async ({ sapPage }) => {
 
             await sapPage.selectTable(c.table);
-            for(const f of c.filters) {
-                await  expect(sapPage.filterInput(f)).toBeEnabled();
-                await  expect(sapPage.filterInput(f)).toHaveValue(""); 
+            for (const f of c.filters) {
+                await expect(sapPage.filterInput(f)).toBeEnabled();
+                await expect(sapPage.filterInput(f)).toHaveValue("");
             }
 
         })
 
     }
 
-    for(const tc of tableCases) {
-        test(`Coloanele ${tc.columns} au denumirea exacta`, async ({ page,sapPage}) => {
+    for (const tc of tableCases) {
+        test(`Coloanele ${tc.columns} au denumirea exacta`, async ({ page, sapPage }) => {
 
             await sapPage.selectTable(tc.table);
             await expect(sapPage.currentTableNameResults).toHaveText(tc.table);
-            for(const d of tc.columns) {
+            for (const d of tc.columns) {
                 await expect(page.locator(`th[data-column-name]=${d}`)).toBeVisible();
             }
         })
 
     }
 
-    for(const tc of tableCases) {
-        test(`Clear Filter ${tc.columns} nu schimba tabelul`, async ({ page,sapPage}) => {
-            
+    for (const tc of tableCases) {
+        test(`Clear Filter ${tc.columns} nu schimba tabelul`, async ({ sapPage }) => {
+
             await sapPage.selectTable(tc.table);
             await sapPage.filterInput(tc.filters[0]).fill("abc");
             await sapPage.btnClearFilters.click();
-            for (const f of tc.filters) { 
+            for (const f of tc.filters) {
                 await expect(sapPage.filterInput(f)).toHaveValue("");
-        
+
             }
-            
+
 
         });
 
     }
+});
 
 
+test.describe('MIDDLE - Table Selection', () => {
+
+    test('5) FR_PARENT expune filtrul ESID', async ({ sapPage, frParentPage }) => {
+        await sapPage.navigateToTable(transactions.se16, tables.frParent)
+        await expect(frParentPage.filterESID).toBeVisible();
+    });
+
+    test('6) MAILCOUNT schimba filtrele -> OWNER apare, ESID dispare', async ({ sapPage, mailCountPage }) => {
+        await sapPage.navigateToTable(transactions.se16, tables.mailCount);
+        await expect(mailCountPage.filterOWNER).toBeVisible();
+        await expect(mailCountPage.filterESID).not.toBeVisible();
+    });
+
+    test('7) ITM_DETAILS expune PARENT_ID si REGION', async ({ sapPage, itmDetailsPage }) => {
+        await sapPage.navigateToTable(transactions.se16, tables.itmDetails);
+        await expect(itmDetailsPage.filterPARENTID).toBeVisible();
+        await expect(itmDetailsPage.filterREGION).toBeVisible();
+    });
+
+    test('8) Schimbare tabel reseteaza filtrele', async ({ sapPage, mailCountPage }) => {
+        await sapPage.navigateToTable(transactions.se16, tables.frParent);
+        //await sapPage.btnExecute.click();
+        await sapPage.navigateToTable(transactions.se16, tables.mailCount);
+        await expect(mailCountPage.filterESID).not.toBeVisible();
+        await expect(mailCountPage.filterFRGUID).not.toBeVisible();
+        await expect(mailCountPage.filterSTATUS).toBeVisible();
+
+        await expect(mailCountPage.filterPARENTID).toBeEmpty();
+        await expect(mailCountPage.filterOWNER).toBeEmpty();
+        await expect(mailCountPage.filterSTATUS).toBeEmpty();
+    });
+});
+
+//  Middle Parametrizabil
+
+test.describe('MIDDLE - Table Selection - OPTIM', () => {
+    test.beforeEach(async ({ sapPage }) => {
+        await openBrowserTransaction(sapPage);
+    });
+
+    for (const c of tableCases){
+        test(`Tabelul ${c.title} expune filtrul ${c.filters}`, async ({ sapPage }) => {
+            await sapPage.selectTable(c.table);
+            for (const f of c.filters ){
+                await expect(sapPage.filterInput(f)).toBeEnabled();
+            }
+        });
+
+    }
+
+    });
 
 
+test.describe('ADVANCED - Table Selection', () => {
 
+    test('9) ENTITLEMENT expune ENT_GUID, ENT_TYPE si ACTIVE', async ({ sapPage, entitlementPage }) => {
+        await sapPage.navigateToTable(transactions.se16, tables.entitlement)
+        await expect(entitlementPage.filterEntitlementGuid).toBeVisible();
+        await expect(entitlementPage.filterEntitlementType).toBeVisible();
+        await expect(entitlementPage.filterActive).toBeVisible();
+    });
 
+    test('10) FR_AUDIT expune FR_GUID si EVENT_TYPE', async ({ sapPage, frAuditPage }) => {
+        await sapPage.navigateToTable(transactions.se16, tables.frAudit);
+        await expect(frAuditPage.filterFRGUID).toBeVisible();
+        await expect(frAuditPage.filterEVENTTYPE).toBeVisible();
+    });
 
-})
+    test('11) CASE_NOTES expune REFERENCE_ID, OWNER si PRIORITY', async ({ sapPage, caseNotesPage }) => {
+        await sapPage.navigateToTable(transactions.se16, tables.caseNotes);
+        await expect(caseNotesPage.filterREFERENCEID).toBeVisible();
+        await expect(caseNotesPage.filterOWNER).toBeVisible();
+        await expect(caseNotesPage.filterPRIORITY).toBeVisible();
+    });
+
+    test('12) Clear filters nu afecteaza tabelul selectat.', async ({ sapPage, frParentPage, mailCountPage }) => {
+        await sapPage.navigateToTable(transactions.se16, tables.frParent);
+        await frParentPage.filterESID.fill('ESID-100');
+        await sapPage.btnExecute.click();
+        await expect(sapPage.resultCount).toContainText(`4 rows`);
+        await sapPage.btnClearFilters.click();
+        await expect(sapPage.tableNameInput).toHaveValue('/CFF/FR_PARENT');
+        await expect(frParentPage.filterFRGUID).toContainText("");
+    });
+
+    test('13) FR_PARENT are 5 coloane', async ({ sapPage, frParentPage }) => {
+        await sapPage.navigateToTable(transactions.se16, tables.frParent);
+        await expect(sapPage.getRowCount()).toBe(5);
+        // await expect((await frParentPage.columnName(columnsFrParent.ESID)).
+        // await expect(frParentPage.tableCell(0, columnsFrParent.FR_GUID)).toContainText('FR_GUID');
+        await expect(frParentPage.tableCell(0, columnsFrParent.ENT_GUID)).toContainText('ENT_GUID');
+        await expect(frParentPage.tableCell(0, columnsFrParent.STATUS)).toContainText('STATUS');
+        await expect(frParentPage.tableCell(0, columnsFrParent.DESCRIPTION)).toContainText('DESCRIPTION');
+
+    });
+
+    test('14) MAILCOUNT are 5 coloane', async ({ sapPage, frParentPage, mailCountPage }) => {
+        await sapPage.navigateToTable(transactions.se16, tables.frParent);
+
+    });
+
+    test('15) Execute fara tabel selectat -> eroare.', async ({ sapPage, frParentPage, mailCountPage }) => {
+
+    });
+
+});

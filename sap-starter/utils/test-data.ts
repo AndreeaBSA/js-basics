@@ -30,6 +30,17 @@ export const columnsFrParent = {
   DESCRIPTION: "DESCRIPTION",
 };
 
+export const filters = {
+  ESID: "ESID",
+  FR_GUID: "FR_GUID",
+  ENT_GUID: "ENT_GUID",
+  STATUS: "STATUS",
+  DESCRIPTION: "DESCRIPTION",
+  Parent_ID: "PARENT_ID",
+  CALLOFF: "CALLOFF",
+  Region: "REGION",
+};
+
 export const automationAnchor = {
   esid: "ESID-777",
   expectedValues: {

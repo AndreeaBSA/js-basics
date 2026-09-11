@@ -5,5 +5,7 @@ export class TableSelectionPage {
 
   constructor(page: Page) {
     this.page = page;
+
+    
   }
 }
