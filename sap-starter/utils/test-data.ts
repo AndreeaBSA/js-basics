@@ -30,6 +30,15 @@ export const columnsFrParent = {
   DESCRIPTION: "DESCRIPTION",
 };
 
+export const columnsItmDetails = {
+  PARENT_ID: "PARENT_ID",
+  CALLOFF: "CALLOFF",
+  SETUP_FR: "SETUP_FR",
+  NWR_ITEM_ID: "NWR_ITEM_ID",
+  REGION: "REGION",
+  COMMENTS: "COMMENTS",
+};
+
 export const filters = {
   ESID: "ESID",
   FR_GUID: "FR_GUID",

@@ -18,6 +18,7 @@ export class SapTableBrowserPage {
   readonly keyboard: Keyboard;
   readonly filtersSelection: Locator;
   readonly columnHeaderRow: Locator;
+  readonly columnHeaders:Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -36,6 +37,8 @@ export class SapTableBrowserPage {
     this.helperCurrentTable = this.page.locator('[data-testid="helper-current-table"]');
     this.filtersSelection = this.page.locator('[data-testid="table-selection-area"]');
     this.columnHeaderRow = this.page.locator('[data-testid="table-header-row"]')
+    this.columnHeaders=this.page.locator('data-column-name');
+
 
 
     this.helperTransaction = this.page
@@ -48,6 +51,10 @@ export class SapTableBrowserPage {
   async goTo() {
     this.page.goto("/");
 
+  }
+
+  columnHeader(columnName: string) :Locator{
+    return this.columnHeaderRow.locator(`[data-column-name="${columnName}"]`);
   }
 
   filterInput(key: string): Locator {

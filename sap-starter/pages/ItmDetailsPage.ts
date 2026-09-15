@@ -14,5 +14,13 @@ export class ItmDetailsPage {
   filterInput(key: string): Locator {
     return this.page.getByPlaceholder(new RegExp(`Filter by\\s+${key}$`, "i"));
   }
+  async getRowCount(): Promise<number> {
+    return this.page.locator("tbody tr[data-row-index]").count();
+  }
 
+    tableCell(rowIndex: number, columnName: string): Locator {
+    return this.page
+      .locator(`tbody tr[data-row-index="${rowIndex}"]`)
+      .locator(`[data-column-name="${columnName}"]`);
+  }
 }
