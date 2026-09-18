@@ -1,5 +1,5 @@
 import { test, expect } from "../../fixtures/test-fixtures.js";
-
+import { openBrowserTransaction } from "../../utils/actions.js";
 
 import { automationAnchor, columnsFrParent, secondaryAnchor, tables, tertiaryAnchor, transactions, emptyGuid, columnsItmDetails } from "../../utils/test-data.js";
 
@@ -93,7 +93,88 @@ test.describe('MIDDLE - Item Details', () => {
         await sapPage.btnExecute.click();
         await itmDetailsPage.tableCell(4, columnsItmDetails.REGION).getByText('APJ');
     });
-
-
-
 } );
+
+
+// ********  BEGINNER  **********
+
+type TableCase = {
+    title: string;
+    filters: {
+        PARENT_ID:string,
+        CALLOFF:string,
+        REGION:string,
+        SETUP:string,
+    };
+    expected: {
+        rowCount: string;
+        rows:number
+        parentId:string;
+        callOff:string;
+        region:string;
+        setupFr:string;
+    }
+}
+
+const tableCases: TableCase[] = [
+    {
+        title: "fara filtre",
+        filters:{
+            PARENT_ID:"",
+            CALLOFF:"",
+            REGION:""
+        },
+        expected:{
+            rowCount: "50 rows",
+            rows:50,
+            parentId:"EN00000000000000000000000000B777",
+            callOff:"CALL-0006",
+        }
+    },
+
+        {
+        title: "ent guid = B777",
+        filters:{
+            PARENT_ID:"B777",
+            CALLOFF:"",
+            REGION:""
+        },
+        expected:{
+            rowCount: "3 rows",
+            rows:3,
+            parentId:"EN00000000000000000000000000B777",
+            callOff:"CALL-FR-778",
+        }
+    }
+ ]
+
+
+test.describe("BEGINNER - Table Selection", () => {
+    test.beforeEach(async ({ sapPage }) => {
+        await openBrowserTransaction(sapPage);
+    });
+
+    for (const c of tableCases) {
+        test(`1,2,3 ${c.title} se incarca, Filtrez, Clear Filters`, async ({ sapPage }) => {
+            await sapPage.executeTable(tables.itmDetails,c.filters);
+
+            await expect(sapPage.resultCount).toHaveText(c.expected.rowCount);
+            expect( await sapPage.getRowCount()).toBe(c.expected.rows);
+
+            await expect(sapPage.cell(0,"PARENT_ID")).toHaveText(c.expected.parentId);
+        });
+    }
+});
+
+test.describe("MIDDLE - Table Selection", () => {
+    test.beforeEach(async ({ sapPage }) => {
+        await openBrowserTransaction(sapPage);
+    });
+
+    for (const c of tableCases) {
+        test(`4,7 ${c.title} se incarca, Filtrez, CALL-OFF`, async ({ sapPage }) => {
+            await sapPage.executeTable(tables.itmDetails,c.filters);
+            await expect(sapPage.cell(0,"CALLOFF")).toHaveText(c.expected.callOff);
+        });
+    }
+});
