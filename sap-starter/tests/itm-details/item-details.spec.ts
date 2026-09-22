@@ -103,8 +103,7 @@ type TableCase = {
     filters: {
         PARENT_ID:string,
         CALLOFF:string,
-        REGION:string,
-        SETUP:string,
+        REGION:string;
     };
     expected: {
         rowCount: string;
@@ -113,6 +112,7 @@ type TableCase = {
         callOff:string;
         region:string;
         setupFr:string;
+        frGuid:string;
     }
 }
 
@@ -128,7 +128,11 @@ const tableCases: TableCase[] = [
             rowCount: "50 rows",
             rows:50,
             parentId:"EN00000000000000000000000000B777",
-            callOff:"CALL-0006",
+            callOff:"00000000000000000000000000000000",
+            setupFr:"SETUP:FR00000000000000000000000000A555",
+            region:"EMEA",
+            frGuid: "FR00000000000000000000000000A555"
+
         }
     },
 
@@ -143,9 +147,48 @@ const tableCases: TableCase[] = [
             rowCount: "3 rows",
             rows:3,
             parentId:"EN00000000000000000000000000B777",
-            callOff:"CALL-FR-778",
+            callOff:"00000000000000000000000000000000",
+            setupFr:"SETUP:FR00000000000000000000000000A555",
+            region:"EMEA",
+            frGuid:"FR00000000000000000000000000A555",
         }
-    }
+    },
+
+    {
+        title: "Secondary entitlement branch",
+        filters:{
+            PARENT_ID:"B778",
+            CALLOFF:"",
+            REGION:""
+        },
+        expected:{
+            rowCount: "1 rows",
+            rows:1,
+            parentId:"EN00000000000000000000000000B778",
+            callOff:"CALL-SECONDARY-778",
+            setupFr:"SETUP:FR00000000000000000000000000A556",
+            region:"AMER",
+            frGuid:"FR00000000000000000000000000A556",
+        }
+    },
+
+        {
+        title: "FR_GUID branch -> regiune APJ.",
+        filters:{
+            PARENT_ID:"A556",
+            CALLOFF:"",
+            REGION:"APJ"
+        },
+        expected:{
+            rowCount: "1 rows",
+            rows:1,
+            parentId:"FR00000000000000000000000000A556",
+            callOff:"CALL-FR-778",
+            setupFr:"SETUP:FR00000000000000000000000000A556",
+            region:"APJ",
+            frGuid:"FR00000000000000000000000000A556",
+        }
+    },
  ]
 
 
@@ -175,6 +218,9 @@ test.describe("MIDDLE - Table Selection", () => {
         test(`4,7 ${c.title} se incarca, Filtrez, CALL-OFF`, async ({ sapPage }) => {
             await sapPage.executeTable(tables.itmDetails,c.filters);
             await expect(sapPage.cell(0,"CALLOFF")).toHaveText(c.expected.callOff);
+            await expect(sapPage.cell(0,"SETUP_FR")).toHaveText(c.expected.setupFr);
+            await expect(sapPage.cell(0,"REGION")).toHaveText(c.expected.region);
+            await expect(sapPage.cell(0, "SETUP_FR")).toContainText(c.expected.frGuid)
         });
     }
 });
